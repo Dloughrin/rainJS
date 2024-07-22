@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raining or Nah</title>
+  <link rel="stylesheet" href="./index.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./index.js" defer></script>
+</head>
+<body>
+  <script>
+     function sendLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+
+          console.log("Latitude: " + userLat);
+          console.log("Longitude: " + userLon);
+
+          try {
+            const response = await axios.get('/location', {
+              params: {
+                latitude: userLat,
+                longitude: userLon
+              }
+            });
+          } catch (error) {
+            console.error('Error sending location:', error);
+          }
+        }, showError);
+        findRain();
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred.");
+          break;
+      }
+    }
+  </script>
+
+  <div class="container">
+    <h1>Is it Raining</h1>
+    <p class="subheading">
+      Determine if it is raining or not!
+    </p>
+    <fieldset>
+      <legend>Select all that apply:</legend>
+
+      <div>
+        <input type="checkbox" id="isRaining" name="isRaining" />
+        <label for="isRaining">It is raining.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isCloudy" name="isCloudy" />
+        <label for="isCloudy">It is cloudy.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isCold" name="isCold" />
+        <label for="isCold">It is cold.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isWindy" name="isWindy" />
+        <label for="isWindy">It is windy.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isPuddles" name="isPuddles" />
+        <label for="isPuddles">There are puddles.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isWet" name="isWet" />
+        <label for="isWet">Things are wet outside.</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="isHumid" name="isHumid" />
+        <label for="isHumid">It is humid outside.</label>
+      </div>
+    </fieldset>
+    <div class="action">
+      <button onclick="isItRaining()">Is it Raining?</button>
+      <button id="whereBtn" onclick="sendLocation()">Where is the nearest rain?</button>
+    </div>
+    <p class="subheading" id='rainingDeterm'></p>
+    <p class="subheading" id='closestRain'></p>
+  </div>
+</body>
+</html>
