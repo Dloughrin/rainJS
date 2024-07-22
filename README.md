@@ -6,6 +6,6 @@ Dependencies:
 - express: web application framework
 - tomorrow.io: Weather data API
 
-Commands for setup: \n
-npm init -y \n
+Commands for setup: <br>
+npm init -y <br>
 npm install express axios geolib
