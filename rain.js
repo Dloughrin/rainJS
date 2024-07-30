@@ -19,13 +19,23 @@ async function getWeatherData(lat, lon) {
 // Function to generate a grid of coordinates around a central point
 function generateGrid(lat, lon, radiusKm, stepKm) {
     const grid = [];
-    const stepDegrees = stepKm / 111; // Approx conversion from km to degrees
+    const latStepDegrees = stepKm / 110.574; // Convert km to degrees latitude
+
     for (let i = -radiusKm; i <= radiusKm; i += stepKm) {
+        const newLat = lat + i / 110.574; // Convert i km to degrees latitude
+        const lonStepDegrees = stepKm / (111.320 * Math.cos(toRadians(lat))); // Convert km to degrees longitude at given latitude
+
         for (let j = -radiusKm; j <= radiusKm; j += stepKm) {
-            grid.push({ lat: lat + i * stepDegrees, lon: lon + j * stepDegrees });
+            const newLon = lon + j / (111.320 * Math.cos(toRadians(newLat))); // Convert j km to degrees longitude at new latitude
+            grid.push({ lat: newLat, lon: newLon });
         }
     }
     return grid;
+}
+
+// Helper function to convert degrees to radians
+function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
 }
 
 // Function to find all locations with rain
