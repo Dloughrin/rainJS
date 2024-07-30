@@ -72,7 +72,10 @@ function findClosestRainLocation(userLat, userLon, rainLocations) {
             closestLocation = loc;
         }
     }
-    return [closestLocation, minDistance];
+    
+    const distanceKm = (minDistance / 1000).toFixed(0); // Convert to kilometers and round to nearest whole number
+    const formattedDistanceKm = Number(distanceKm).toLocaleString(); // Format with commas
+    return [closestLocation, formattedDistanceKm];
 }
 
 // Example usage
